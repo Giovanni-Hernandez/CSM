@@ -5,7 +5,7 @@ CEO SECURITY MASTER es un sistema creado para proteger información sensible, ci
 
 * **Giovanni Hernández** - [Giovanni-Hernandez](https://github.com/Giovanni-Hernandez)
 * **Jesus Morales** - [Capu720](https://github.com/Capu720)
-* **Marco Ramirez** - [Frunulunuuuu](https://github.com/Frunulunuuuu)
+* **Marco Ramirez** - [marcorh2000](https://github.com/Frunulunuuuu)
 
 
 ## Agradecimiento
