@@ -3,7 +3,7 @@ CEO SECURITY MASTER es un sistema creado para proteger la información sensible 
 
 
 <p align="center">
-  <img width="338" height="347" src="https://raw.githubusercontent.com/Giovanni-Hernandez/prueba/master/Logo.png" alt="Logo CSM">
+  <img width="338" height="347" src="https://raw.githubusercontent.com/Giovanni-Hernandez/CSM/master/Logo.png" alt="Logo CSM">
 </p>
 
 
