@@ -195,7 +195,7 @@ def main_account_screen():
     main_screen.title("Account Login")
     main_screen['background']='black'
     # Create a photoimage object of the image in the path
-    img = Image.open("../CSM/Logo.png")
+    img = Image.open("../CSM/img/Logo.png")
     # Resize the image
     img = img.resize((150,155))
     img = ImageTk.PhotoImage(img)
