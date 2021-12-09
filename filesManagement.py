@@ -1,3 +1,5 @@
+import base64
+
 #Saves a file in a route with specific extension using base 64
 def savefile(route, filename, extension, contentBytes):
     f = open(route + filename + extension, 'wb')
@@ -11,3 +13,6 @@ def readFile(route, filename, extension):
     f.close()
 
     return content
+
+#savefile('', 'prueba', '.txt', b'Comida')
+#print(str(readFile('', 'prueba', '.txt')))
