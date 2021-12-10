@@ -3,14 +3,18 @@ from tkinter import *
 import os
 from os import system
 from PIL import Image, ImageTk
+import time
+#To copy directories
+import shutil
 # Generator and verificator of One Time Password (OTP)
 import authenticator as gen
 # Menus
 import ceoMenu
 # Block cipher
 import aesCBC 
-
 import filesManagement as fman
+# Digital signature
+import rsa2048
 
 # Designing window for registration
 def register():
@@ -116,23 +120,66 @@ def get_otp():
 
     # Welcome the new directive
     system("cls")
-    print("---------------Welcome directive: "+username_info+"---------------")
+    print("---------------Welcome directive:"+username_info+"---------------")
     
     # Show the OTP to the user
     print("\nGenerating OTP (QR or secret key)...")
+    time.sleep(3)
     gen.generate(username_info)
+    
+    var = input("Do you want to start with the key generation process?(y/n)\n[>]: ")
+    if(var.upper() == "Y"):
+        print("\n-----Key generation-----")
+        #Create a directory with the username
+        os.mkdir("../CSM/directives/"+username_info)
+        print("\nGenerating AES key...")
+        time.sleep(3)
+        print("Successful AES key generation: key.aes")
+        
+        #Create a file with the AES key
+        fman.savefile("../CSM/directives/"+username_info+"/","key",".aes",aesCBC.generate256Key())
+        time.sleep(3)
 
-    #Create a directory with the username
-    os.mkdir("../CSM/directives/"+username_info)
-    print("\nGenerating AES key...")
-    print("Successful AES key generation: "+username_info+"key.aes")
+        #Create two files, one with the public key and the other with the directive's private key
+        print("\nGenerating rsa key pair...")
+        pubKey, privKey = rsa2048.generateRSAKeys()
+        print("Saving rsa key pair...")
+        time.sleep(3)
+        rsa2048.saveRSAKey("../CSM/directives/"+username_info+"/","pub",pubKey)
+        print("A few seconds...")
+        time.sleep(3)
+        rsa2048.saveRSAKey("../CSM/directives/"+username_info+"/","priv",privKey)
 
-    #Create a file with the AES key
-    fman.savefile("../CSM/directives/"+username_info+"/"+username_info,"key",".aes",aesCBC.generate256Key())
-    print("\nGenerating rsa key pair...")
-    print("The CEO's RSA public key is being shared with you...")
-    print("The AES key is being encrypted with the CEO's public RSA key..")
-    print("Your RSA public key and encrypted AES key are being shared with the CEO..")
+        print("\n-----Key exchange-----")
+        print("The CEO's RSA public key is being shared with you...")
+        shutil.copyfile("../CSM/ceo/CEOpub.pem", "../CSM/directives/"+username_info+"/CEOpub.pem")
+        time.sleep(3)
+        print("Succesfull sharing")
+
+        print("\nThe AES key is being encrypted with the CEO's public RSA key...")
+        print("Reading rsa public key of the ceo...")
+        pubKeyRecovered = rsa2048.readRSAPublicKey("../CSM/directives/"+username_info+"/","CEOpub")
+        print("Reading your AES key...")
+        aesRecovered = fman.readFile("../CSM/directives/"+username_info+"/","key",".aes")
+        print("Encrypting...")
+        time.sleep(3)
+        keyEncrypted = rsa2048.encryptRSA(aesRecovered,pubKeyRecovered)
+        time.sleep(3)
+        print("Successful encryption...")
+
+        print("\nYour RSA public key and encrypted AES key are being shared with the CEO..")
+        # Create a directory with the directive's username in the ceo folder 
+        os.mkdir("../CSM/ceo/directives/"+username_info)
+        # Storing AES key encryption in the ceo managers folder
+        fman.savefile("../CSM/ceo/directives/"+username_info+"/", "encryptedKey",".aes",keyEncrypted)
+        #rsa2048.saveRSAKey("../CSM/ceo/directives/"+username_info+"/", "key", keyEncrypted)
+        print("Encrypted AES key shared successfully...")
+        time.sleep(3)
+        # Sharing the directive's public key with the CEO
+        shutil.copyfile("../CSM/directives/"+username_info+"/pub.pem","../CSM/ceo/directives/"+username_info+"/pub.pem")
+        print("Public key shared with CEO successfully...")
+
+        print("\n-----Congratulations sharing and successful key generation!-----\n")
 
 # Implementing event on login button 
 def login_verify():
@@ -154,6 +201,7 @@ def login_verify():
                     login_sucess()
                     ceoMenu.ceoPrincipalMenu()
                 else:
+                    print("Login success!")
                     login_sucess()
             else:
                 password_not_recognised()
