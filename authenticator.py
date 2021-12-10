@@ -27,6 +27,6 @@ def verificate_otp(username):
     totp_object = pyotp.TOTP(verify[2])
     system('cls')
     print("¡Good correct username and password! Now 2 factor verification")
-    get_otp = input("Input the OTP\n[>]: ")
+    get_otp = input("\nInput the OTP\n[>]: ")
 
     return (totp_object.verify(otp = get_otp))
