@@ -1,4 +1,6 @@
 import filesManagement as fiMan
+import aesCBC as Aes
+import rsa2048 as Rsa
 
 def directivePrincipalMenu():
 
@@ -27,7 +29,9 @@ def directivePrincipalMenu():
             docToSign()
 
 def singDocument():
-    route = 'files/nosigned'
+    #route 
+    route = 'directives/Carlos/'
+    key = fiMan.readFile64(route, "CarlosAES", ".aes")
     i = 1
     print("Select a document to sing")
     files = fiMan.listFiles(route)
@@ -37,12 +41,32 @@ def singDocument():
     
     pos = int(input("\nYour option: "))
     file_sel_name = files[pos-1]
-    print(file_sel_name)
-    #Se desencripta los archivos que estan
+
+    #Se desencripta los archivos que estan en la carpeta que seleccione
+    route = route + file_sel_name + "/"
+    document_sel = fiMan.readFile64(route, file_sel_name, ".enc")
+    document_sel_iv = fiMan.readFile64(route, file_sel_name+"IV", ".enc")
+
+    document_desc = Aes.decryptAES(key, document_sel, document_sel_iv)
+    fiMan.saveFile(route, file_sel_name, ".pdf", document_desc)
+
     #Se muestra el archivo al directivo
-    fiMan.openFile(route+ '/' + file_sel_name,"","")
+    fiMan.openFile(route, file_sel_name ,".pdf")
+
+
+
+    #Se cifra el documento con su AES
+    #file = fiMan.readFile(route + '/' + file_sel_name, "", "")
     
+    #cifra, iv = Aes.encryptAES(key, file)
+    
+    #Se firma el documento con RSA
+    #signature = Rsa.signSHA256(cifra, keyCEO)
+    
+    #fiMan.saveFile64(route, )
+
     return 0
+
 
 
 
@@ -56,5 +80,4 @@ def docToSign():
 def signedDocuments():
     return 0
 
-        
 directivePrincipalMenu()   

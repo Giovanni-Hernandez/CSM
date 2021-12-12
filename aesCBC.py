@@ -1,7 +1,7 @@
 from Crypto.Util.Padding import pad, unpad
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
-#from filesManagement import savefile, readFile
+from filesManagement import savefile64, readFile64, saveFile, readFile
 
 #Generates random 256-bit AES key
 def generate256Key():
@@ -24,5 +24,16 @@ def decryptAES(key, cipherBytes, iv):
 #decipherBytes = decryptAES(key, cipherBytes, iv)
 #print(str(decipherBytes))
 
+#key = generate256Key()
+#savefile64("directives/Carlos/", "CarlosAES", ".aes", key)
 
-
+#Para cifrar el documento
+#key = readFile64("directives/Carlos/", "CarlosAES", ".aes")
+#libro = readFile("files/nosigned/", "Redes", ".pdf")
+#cifra_libro, iv = encryptAES(key, libro)
+#savefile64("directives/Carlos/Redes/", "Redes", ".enc",cifra_libro)
+#savefile64("directives/Carlos/Redes/", "RedesIV", ".enc",iv)
+#libro = readFile64("directives/Carlos/Redes/", "Redes", ".enc")
+#iv = readFile64("directives/Carlos/Redes/", "RedesIV", ".enc")
+#des = decryptAES(key, libro, iv)
+#saveFile("directives/Carlos/Redes/", "Redes", ".pdf", des)

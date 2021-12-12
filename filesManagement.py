@@ -18,7 +18,7 @@ def readFile64(route, filename, extension):
 
 #Reads bytes from file
 def readFile(route, filename, extension):
-    f = open(route + filename + extension, 'rb', encoding="utf-8")
+    f = open(route + filename + extension, 'rb')
     content = f.read()
     f.close()
     return content
@@ -26,13 +26,14 @@ def readFile(route, filename, extension):
 #Saves a file in a route with specific extension
 def saveFile(route, filename, extension, contentBytes):
     f = open(route + filename + extension, 'wb')
-    f.write()
-    f.close()
+    f.write(contentBytes)
+    f.close
 
 
 #Open a file in any format
 def openFile(route, filename, extension):
-    subprocess.Popen(route + filename + extension, shell = True)
+    direccion = os.path.abspath(os.getcwd()) + "/" + route + filename + extension
+    subprocess.Popen(direccion, shell = True)
 
 #Return a list of all documents that are in a carpet
 def listFiles(route):
@@ -40,3 +41,4 @@ def listFiles(route):
 
 #savefile('', 'prueba', '.txt', b'Comida')
 #print(str(readFile('', 'prueba', '.txt')))
+
