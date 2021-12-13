@@ -87,4 +87,4 @@ def chooseADocument():
     print("Documents have been sent to each directive")
 
 
-ceoPrincipalMenu()
+#ceoPrincipalMenu()
