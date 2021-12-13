@@ -4,16 +4,17 @@ import os
 from os import system
 from PIL import Image, ImageTk
 import time
-#To copy directories
+# To copy directories
 import shutil
 # Generator and verificator of One Time Password (OTP)
 import authenticator as gen
 # Menus
 import ceoMenu
+import directiveMenu
 # Block cipher
-import aesCBC 
+import aesCBC
 import filesManagement as fman
-# Digital signature
+# Digital signature and encipher RSA
 import rsa2048
 
 # Designing window for registration
@@ -125,19 +126,26 @@ def get_otp():
     # Show the OTP to the user
     print("\nGenerating OTP (QR or secret key)...")
     time.sleep(3)
+    #Create a directory with the username
+    os.mkdir("../CSM/directives/"+username_info)
+    os.mkdir("../CSM/directives/"+username_info+"/private")
+    os.mkdir("../CSM/directives/"+username_info+"/private/documents") # To store the documents AES and IV
+    os.mkdir("../CSM/directives/"+username_info+"/private/signatures") #To store his signatures
     gen.generate(username_info)
+    print("###QR stored in: CSM/directives/"+username_info+"/private/qr.png")
+    
+
     
     var = input("Do you want to start with the key generation process?(y/n)\n[>]: ")
     if(var.upper() == "Y"):
         print("\n-----Key generation-----")
-        #Create a directory with the username
-        os.mkdir("../CSM/directives/"+username_info)
+
         print("\nGenerating AES key...")
         time.sleep(3)
-        print("Successful AES key generation: key.aes")
-        
         #Create a file with the AES key
-        fman.savefile("../CSM/directives/"+username_info+"/","key",".aes",aesCBC.generate256Key())
+        fman.savefile64("../CSM/directives/"+username_info+"/","key",".aes",aesCBC.generate256Key())
+        print("Successful AES key generation: key.aes")
+        print("###AES key stored in: CSM/directives/"+username_info+"/key.aes")
         time.sleep(3)
 
         #Create two files, one with the public key and the other with the directive's private key
@@ -146,15 +154,18 @@ def get_otp():
         print("Saving rsa key pair...")
         time.sleep(3)
         rsa2048.saveRSAKey("../CSM/directives/"+username_info+"/","pub",pubKey)
+        print("###Public key stored in: CSM/directives/"+username_info+"/pub.pem")
         print("A few seconds...")
         time.sleep(3)
-        rsa2048.saveRSAKey("../CSM/directives/"+username_info+"/","priv",privKey)
+        rsa2048.saveRSAKey("../CSM/directives/"+username_info+"/private"+"/","priv",privKey)
+        print("###Private key stored in: CSM/directives/"+username_info+"/private/priv.pem")
 
         print("\n-----Key exchange-----")
         print("The CEO's RSA public key is being shared with you...")
         shutil.copyfile("../CSM/ceo/CEOpub.pem", "../CSM/directives/"+username_info+"/CEOpub.pem")
         time.sleep(3)
-        print("Succesfull sharing")
+        print("###CEO's RSA public key stored in: /CSM/directives/"+username_info+"/CEOpub.pem")
+       
 
         print("\nThe AES key is being encrypted with the CEO's public RSA key...")
         print("Reading rsa public key of the ceo...")
@@ -170,14 +181,17 @@ def get_otp():
         print("\nYour RSA public key and encrypted AES key are being shared with the CEO..")
         # Create a directory with the directive's username in the ceo folder 
         os.mkdir("../CSM/ceo/directives/"+username_info)
+        os.mkdir("../CSM/ceo/directives/"+username_info+"/private")
         # Storing AES key encryption in the ceo managers folder
-        fman.savefile("../CSM/ceo/directives/"+username_info+"/", "encryptedKey",".aes",keyEncrypted)
+        fman.savefile64("../CSM/ceo/directives/"+username_info+"/private", "encryptedKey",".aes",keyEncrypted)
+        print("###Encrypted AES key(directive) stored in: CSM/ceo/directives/"+username_info+"/private/encryptedKey.aes")
         #rsa2048.saveRSAKey("../CSM/ceo/directives/"+username_info+"/", "key", keyEncrypted)
         print("Encrypted AES key shared successfully...")
         time.sleep(3)
         # Sharing the directive's public key with the CEO
         shutil.copyfile("../CSM/directives/"+username_info+"/pub.pem","../CSM/ceo/directives/"+username_info+"/pub.pem")
         print("Public key shared with CEO successfully...")
+        print("###Public key(directive) stored in: CSM/ceo/directives/"+username_info+"/pub.pem")
 
         print("\n-----Congratulations sharing and successful key generation!-----\n")
 
@@ -203,6 +217,7 @@ def login_verify():
                 else:
                     print("Login success!")
                     login_sucess()
+                    directiveMenu.directivePrincipalMenu()
             else:
                 password_not_recognised()
         else:
