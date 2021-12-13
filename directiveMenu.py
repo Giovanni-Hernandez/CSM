@@ -31,7 +31,11 @@ def directivePrincipalMenu():
 def singDocument():
     #route 
     route = 'directives/Carlos/'
+    routeCEO = 'ceo/'
     key = fiMan.readFile64(route, "CarlosAES", ".aes")
+    keyRSACEOPub = Rsa.readRSAPublicKey(routeCEO, "CEOpub")
+    keyRSAPrivate = Rsa.readRSAPrivateKey(route, 'privada')
+
     i = 1
     print("Select a document to sing")
     files = fiMan.listFiles(route)
@@ -53,14 +57,21 @@ def singDocument():
     #Se muestra el archivo al directivo
     fiMan.openFile(route, file_sel_name ,".pdf")
 
+    res = int(input("Do you want to sign " + file_sel_name + ".pdf ?\n1.Yes\n2.No\nYour Option: "))
+    if(res == 1):
+        #Se firma el documento con RSA
+        encryp_aes_key = Rsa.encryptRSA(key, keyRSACEOPub)
+        sign = Rsa.signSHA256(document_sel, keyRSAPrivate)
+        #Se guardan los arhcivos con la extension
+        fiMan.savefile64(route, file_sel_name, ".enc.sig", sign)
+        #Se guarda los archivos en la direccion del CEO
+        #fiMan.savefile64(routeCEO+"/documents/", file_sel_name, ".sig", sign)
+        fiMan.savefile64(routeCEO+"/documents/",file_sel_name + "Carlos", ".enc.sig",sign)
 
-
-    #Se cifra el documento con su AES
-    #file = fiMan.readFile(route + '/' + file_sel_name, "", "")
+    else:
+        return 0
+        
     
-    #cifra, iv = Aes.encryptAES(key, file)
-    
-    #Se firma el documento con RSA
     #signature = Rsa.signSHA256(cifra, keyCEO)
     
     #fiMan.saveFile64(route, )
