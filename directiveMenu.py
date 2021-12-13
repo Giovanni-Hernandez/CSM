@@ -98,4 +98,4 @@ def docToSign():
 def signedDocuments():
     return 0
 
-directivePrincipalMenu()   
+#directivePrincipalMenu()   
