@@ -3,23 +3,24 @@ import pyotp
 import qrcode
 from os import system
 
+# Generar un factor de verificación de 2 pasos mediante OTP
 def generate(username):
     secret = pyotp.random_base32() 
-    with open('secret.txt', mode='w') as f: f.write(secret)
+    # Guardando llave secreta en la carpeta users en el archivo con el username
     print("Secret Key:", secret)
     file = open("../CSM/users/"+username, "a")
     file.write(secret)
     file.close()
 
     totp_object = pyotp.TOTP(secret)
-    #print(totp_object.now()) #Print the OTP
     qr_text = totp_object.provisioning_uri(name=username, issuer_name="CEO Security Master")
-    #print(qr_text)
 
-    #Convertir el código en QR
+    # Convertir el texto en QR
     img = qrcode.make(qr_text)
     img.show()
+    img.save("../CSM/directives/"+username+"/private/qr.png")
 
+# Verificacion del OTP  
 def verificate_otp(username):
     file1 = open("../CSM/users/"+username, "r")
     verify = file1.read().splitlines()
