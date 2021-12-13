@@ -30,12 +30,18 @@ def directivePrincipalMenu():
 
 def singDocument():
     #route 
-    route = 'directives/Carlos/'
+    route = 'directives/Carlos/private/'
     routeCEO = 'ceo/'
+
+    #Se extraen las llaves AES y RSA de un usuario
     key = fiMan.readFile64(route, "CarlosAES", ".aes")
     keyRSACEOPub = Rsa.readRSAPublicKey(routeCEO, "CEOpub")
     keyRSAPrivate = Rsa.readRSAPrivateKey(route, 'privada')
 
+    #Cambiamos la ruta para que sea de los documentos
+    route = 'directives/Carlos/documents/'
+
+    #Le mostamos al usuario los documentos que estan disponibles para firmar
     i = 1
     print("Select a document to sing")
     files = fiMan.listFiles(route)
@@ -60,26 +66,27 @@ def singDocument():
     res = int(input("Do you want to sign " + file_sel_name + ".pdf ?\n1.Yes\n2.No\nYour Option: "))
     if(res == 1):
         #Se firma el documento con RSA
-        encryp_aes_key = Rsa.encryptRSA(key, keyRSACEOPub)
-        sign = Rsa.signSHA256(document_sel, keyRSAPrivate)
-        #Se guardan los arhcivos con la extension
-        fiMan.savefile64(route, file_sel_name, ".enc.sig", sign)
+        encryp_aes_key = Rsa.encryptRSA(key, keyRSACEOPub) #Se encripta la llave AES del directivo con la RSA publica del CEO
+        sign = Rsa.signSHA256(encryp_aes_key, keyRSAPrivate) #Se firma con la lave RSA privada del director la llave encriptada de AES
+
+        #Se guardan los arhcivos con la extension en la carpeta del director
+        fiMan.savefile64(route, file_sel_name + "Carlos", ".enc.sig", sign)
+        fiMan.savefile64(route, file_sel_name + "Carlos", ".aes", encryp_aes_key)
+
         #Se guarda los archivos en la direccion del CEO
-        #fiMan.savefile64(routeCEO+"/documents/", file_sel_name, ".sig", sign)
-        fiMan.savefile64(routeCEO+"/documents/",file_sel_name + "Carlos", ".enc.sig",sign)
-
-    else:
-        return 0
-        
+        fiMan.savefile64(routeCEO+"/documents/"+file_sel_name+"/",file_sel_name + "Carlos", ".enc.sig",sign)
+        fiMan.savefile64(routeCEO+"/documents/"+file_sel_name+"/",file_sel_name + "Carlos", ".aes",encryp_aes_key)
     
-    #signature = Rsa.signSHA256(cifra, keyCEO)
-    
-    #fiMan.saveFile64(route, )
+    #Borrando el archivo para evitar mostrarlo
+    band = True
+    while(band != False):
+        try:
+            fiMan.deleteFile(route+"/"+file_sel_name+".pdf")
+            band = False
+        except:
+            input("Please close the file " + file_sel_name + ".pdf, then press enter ")
 
-    return 0
-
-
-
+    print(file_sel_name+".pdf successfully signed and sent to CEO :) \n")
 
 
 def chooseADocument():

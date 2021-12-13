@@ -39,6 +39,10 @@ def openFile(route, filename, extension):
 def listFiles(route):
     return os.listdir(route)
 
+#Deelet a file that you select
+def deleteFile(route):
+    os.remove(route)
+
 #savefile('', 'prueba', '.txt', b'Comida')
 #print(str(readFile('', 'prueba', '.txt')))
 
