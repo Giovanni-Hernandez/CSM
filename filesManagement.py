@@ -65,4 +65,5 @@ def listDir(route):
 
 # Create a directory
 def createDir(route, name):
-    os.mkdir(route + name)
+    if not os.path.exists(route + name):
+        os.mkdir(route + name)
