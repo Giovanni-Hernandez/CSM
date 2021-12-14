@@ -239,9 +239,9 @@ def login_verify():
                     login_sucess()
                     ceoMenu.ceoPrincipalMenu()
                 else:
-                    print("Login success!")
+                    print("Login success!\n")
                     login_sucess()
-                    directiveMenu.directivePrincipalMenu()
+                    directiveMenu.directivePrincipalMenu(username1)
             else:
                 password_not_recognised()
         else:
