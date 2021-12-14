@@ -2,8 +2,10 @@ import filesManagement as fiMan
 import aesCBC as Aes
 import rsa2048 as Rsa
 
-def directivePrincipalMenu():
 
+def directivePrincipalMenu(username):
+    directive = username
+    print("Welcome directive " + directive)
     option = 0
 
     while (option != 4):
@@ -18,7 +20,7 @@ def directivePrincipalMenu():
 
         if(option == 1):
             #Aqui se va a la parte de firmar un documento
-            singDocument()
+            singDocument(directive)
 
         if(option == 2):
             #Aqui muestra los archivos que faltan por firmar
@@ -28,23 +30,28 @@ def directivePrincipalMenu():
             #Aqui simplemente muestra un reporte
             docToSign()
 
-def singDocument():
-    #route 
-    route = 'directives/Carlos/private/'
-    routeCEO = 'ceo/'
+def singDocument(directive):
+    
+    #Routes of the directive
+     
+    routeDirective = 'directives/' + directive + "/"
+    routeDocsDirective = 'directives/' + directive + '/documents/'
+    routePrivDirective = 'directives/' + directive + '/private/'
+    routeCEO = 'ceo/documents/'
+    
+    #route = 'directives/Carlos/private/'
+    #routeCEO = 'ceo/'
 
     #Se extraen las llaves AES y RSA de un usuario
-    key = fiMan.readFile64(route, "CarlosAES", ".aes")
-    keyRSACEOPub = Rsa.readRSAPublicKey(routeCEO, "CEOpub")
-    keyRSAPrivate = Rsa.readRSAPrivateKey(route, 'privada')
-
-    #Cambiamos la ruta para que sea de los documentos
-    route = 'directives/Carlos/documents/'
+    key = fiMan.readFile64(routePrivDirective, "key", ".aes")
+    keyRSACEOPub = Rsa.readRSAPublicKey(routeDirective, "CEOpub")
+    keyRSAPrivate = Rsa.readRSAPrivateKey(routePrivDirective, "priv")
 
     #Le mostamos al usuario los documentos que estan disponibles para firmar
     i = 1
     print("Select a document to sing")
-    files = fiMan.listFiles(route)
+    
+    files = fiMan.listFiles(routeDocsDirective)
     for file in files:
         print("" + str(i) +". "+file)
         i = i + 1
@@ -53,41 +60,38 @@ def singDocument():
     file_sel_name = files[pos-1]
 
     #Se desencripta los archivos que estan en la carpeta que seleccione
-    route = route + file_sel_name + "/"
-    document_sel = fiMan.readFile64(route, file_sel_name, ".enc")
-    document_sel_iv = fiMan.readFile64(route, file_sel_name+"IV", ".enc")
+    routeDocSel = routeDocsDirective + file_sel_name + "/"
+    document_sel = fiMan.readFile64(routeDocSel, "encFile", ".enc")
+    document_sel_iv = fiMan.readFile64(routeDocSel, "iv", ".data")
 
     document_desc = Aes.decryptAES(key, document_sel, document_sel_iv)
-    fiMan.saveFile(route, file_sel_name, ".pdf", document_desc)
+    fiMan.saveFile(routeDocSel, file_sel_name, '', document_desc)
 
     #Se muestra el archivo al directivo
-    fiMan.openFile(route, file_sel_name ,".pdf")
+    fiMan.openFile(routeDocSel, file_sel_name ,"")
 
-    res = int(input("Do you want to sign " + file_sel_name + ".pdf ?\n1.Yes\n2.No\nYour Option: "))
+    res = int(input("Do you want to sign '" + file_sel_name + "'?\n1.Yes\n2.No\nYour Option: "))
     if(res == 1):
         #Se firma el documento con RSA
-        encryp_aes_key = Rsa.encryptRSA(key, keyRSACEOPub) #Se encripta la llave AES del directivo con la RSA publica del CEO
-        sign = Rsa.signSHA256(encryp_aes_key, keyRSAPrivate) #Se firma con la lave RSA privada del director la llave encriptada de AES
-
+        signature = Rsa.signSHA256(document_sel, keyRSAPrivate)
+    
         #Se guardan los arhcivos con la extension en la carpeta del director
-        fiMan.savefile64(route, file_sel_name + "Carlos", ".enc.sig", sign)
-        fiMan.savefile64(route, file_sel_name + "Carlos", ".aes", encryp_aes_key)
+        fiMan.savefile64(routeDocSel, "encFile",".enc.sig", signature )
 
         #Se guarda los archivos en la direccion del CEO
-        fiMan.savefile64(routeCEO+"/documents/"+file_sel_name+"/",file_sel_name + "Carlos", ".enc.sig",sign)
-        fiMan.savefile64(routeCEO+"/documents/"+file_sel_name+"/",file_sel_name + "Carlos", ".aes",encryp_aes_key)
+        routeCEO = routeCEO + file_sel_name + '/signatures/' + directive + "/"
+        fiMan.savefile64(routeCEO, "encFile",".enc.sig", signature )
+        
+        print("'"+file_sel_name+"' successfully signed and sent to CEO :) \n")
     
     #Borrando el archivo para evitar mostrarlo
     band = True
     while(band != False):
         try:
-            fiMan.deleteFile(route+"/"+file_sel_name+".pdf")
+            fiMan.deleteFile(routeDocSel + "/" + file_sel_name)
             band = False
         except:
             input("Please close the file " + file_sel_name + ".pdf, then press enter ")
-
-    print(file_sel_name+".pdf successfully signed and sent to CEO :) \n")
-
 
 def chooseADocument():
    return 0
@@ -98,4 +102,4 @@ def docToSign():
 def signedDocuments():
     return 0
 
-#directivePrincipalMenu()   
+directivePrincipalMenu("")   
