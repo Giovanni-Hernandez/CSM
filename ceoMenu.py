@@ -1,7 +1,6 @@
 import base64
 from os import system
 import sys
-
 from rsa.pkcs1 import verify
 import filesManagement as fm
 import rsa2048 as rsa
@@ -20,10 +19,10 @@ def ceoPrincipalMenu():
     while (option != 4):
         system('cls')
         print('C E O   M E N U\n')
-        print('1. Choose a document')
-        print('2. Verify signatures')
-        print('3. Delete a document')
-        print('4. Exit app')
+        print('\t1. Choose a document')
+        print('\t2. Verify signatures')
+        print('\t3. Delete a document')
+        print('\t4. Exit app')
         print('\nSelect an option: ', end='')
 
         option = int(input())
@@ -41,21 +40,20 @@ def ceoPrincipalMenu():
 def verification():
     option = 0
 
-    while (option != 3):
-        system('cls')
-        print('S I G N A T U R E S   V E R I F I C A T I O N\n')
-        print('1. Verify a document')
-        print('2. Verify all documents')
-        print('3. Cancel')
-        print('\nSelect an option: ', end='')
+    system('cls')
+    print('S I G N A T U R E S   V E R I F I C A T I O N\n')
+    print('\t1. Verify a document')
+    print('\t2. Verify all documents')
+    print('\t3. Cancel')
+    print('\nSelect an option: ', end='')
 
-        option = int(input())
+    option = int(input())
 
-        if(option == 1):
-            singleDocument()
+    if(option == 1):
+        singleDocument()
 
-        if(option == 2):
-            allDocuments()
+    if(option == 2):
+        allDocuments()
 
 
 def singleDocument():
@@ -113,7 +111,7 @@ def chooseADocument(route):
     print("A V A I L A B L E   D O C U M E N T S\n")
 
     for file in listOfFiles:
-        print("" + str(i) + ". " + file)
+        print("\t" + str(i) + ". " + file)
         i = i + 1
 
     fileSelected = int(input("\nChoose a file: "))
