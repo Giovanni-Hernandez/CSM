@@ -1,6 +1,8 @@
 import base64
 from os import system
 import sys
+
+from rsa.pkcs1 import verify
 import filesManagement as fm
 import rsa2048 as rsa
 import aesCBC as aes
@@ -27,26 +29,77 @@ def ceoPrincipalMenu():
         option = int(input())
 
         if(option == 1):
-            chooseADocument()
+            encryptDocument()
 
         if(option == 2):
-            input()
+            verification()
 
         if(option == 3):
             input()
 
 
-def chooseADocument():
+def verification():
+    option = 0
 
-    folder = ceoRoute + privateFolder + 'documents/'
+    while (option != 3):
+        system('cls')
+        print('S I G N A T U R E S   V E R I F I C A T I O N\n')
+        print('1. Verify a document')
+        print('2. Verify all documents')
+        print('3. Cancel')
+        print('\nSelect an option: ', end='')
+
+        option = int(input())
+
+        if(option == 1):
+            singleDocument()
+
+        if(option == 2):
+            input()
+
+
+def singleDocument():
+    # Getting al documents available for signature
+    filename = chooseADocument(ceoDocuments)
+    verifySignature(filename)
+    input()
+
+    return 1
+
+
+def verifySignature(filename):
+    # Getting all directives that can sign this document
+    signaturesRoute = ceoDocuments + filename + '/signatures/'
+    listOfDir = fm.listDir(signaturesRoute)
+
+    for directive in listOfDir:
+        # Getting directives public key
+        routeDirective = ceoDirectivesRoute + '/' + directive + '/'
+        keyRSADirPub = rsa.readRSAPublicKey(routeDirective, "pub")
+
+        # Getting encrypted file and signature
+        routeDirSignature = signaturesRoute + directive + '/'
+        document = fm.readFile64(routeDirSignature, "encFile", ".enc")
+        signature = fm.readFile64(routeDirSignature, "encFile", ".enc.sig")
+
+        # Checking if signature has been done
+        if(signature == False):
+            print(directive + ' has not signed this document')
+        # Verify signature
+        elif(rsa.verifySHA256(document, signature, keyRSADirPub)):
+            print(directive + "'s signature is valid")
+        else:
+            print(directive + "'s signature IS NOT VALID!!!")
+
+
+def chooseADocument(route):
 
     # Available documents are shown
-    listOfFiles = fm.listFiles(folder)
-
-    system('cls')
+    listOfFiles = fm.listFiles(route)
 
     i = 1
 
+    system('cls')
     print("A V A I L A B L E   D O C U M E N T S\n")
 
     for file in listOfFiles:
@@ -55,6 +108,14 @@ def chooseADocument():
 
     fileSelected = int(input("\nChoose a file: "))
     filename = listOfFiles[fileSelected - 1]
+
+    return filename
+
+
+def encryptDocument():
+
+    folder = ceoRoute + privateFolder + 'documents/'
+    filename = chooseADocument(folder)
 
     # Bytes from file are read
     contentFile = fm.readFile(folder, filename, '')
@@ -92,13 +153,10 @@ def chooseADocument():
         fm.savefile64(fileDir, 'encFile', '.enc', encContent)
         fm.savefile64(fileDir, 'iv', '.data', iv)
 
-        #pruebaR = fm.readFile64(fileDir, 'encFile', '.enc')
-        #iv = fm.readFile64(fileDir, 'iv', '.data')
-        #desc = aes.decryptAES(decAESKey, pruebaR, iv)
-        #fm.saveFile(fileDir, filename, '', desc)
-
         # Create directory to know this director has to sign this document
         fm.createDir(ceoFileRouteSig, directive)
+        fm.savefile64(ceoFileRouteSig + '/' + directive +
+                      '/', 'encFile', '.enc', encContent)
 
     print("Documents have been sent to each directive")
     input()

@@ -14,7 +14,11 @@ def savefile64(route, filename, extension, contentBytes):
 
 
 def readFile64(route, filename, extension):
-    f = open(route + filename + extension, 'rb')
+    try:
+        f = open(route + filename + extension, 'rb')
+    except IOError:
+        return False
+
     content = base64.b64decode(f.read())
     f.close()
 
@@ -24,7 +28,12 @@ def readFile64(route, filename, extension):
 
 
 def readFile(route, filename, extension):
-    f = open(route + filename + extension, 'rb')
+
+    try:
+        f = open(route + filename + extension, 'rb')
+    except IOError:
+        return False
+
     content = f.read()
     f.close()
     return content
