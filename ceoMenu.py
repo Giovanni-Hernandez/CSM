@@ -1,3 +1,4 @@
+import base64
 from os import system
 import sys
 import filesManagement as fm
@@ -7,7 +8,7 @@ import aesCBC as aes
 ceoRoute = 'ceo/'
 privateFolder = 'private/'
 ceoDirectivesRoute = 'ceo/directives/'
-mode = 0o666
+ceoDocuments = 'ceo/documents/'
 
 
 def ceoPrincipalMenu():
@@ -58,20 +59,27 @@ def chooseADocument():
     # Bytes from file are read
     contentFile = fm.readFile(folder, filename, '')
 
+    # Getting CEO's private key
+    CEOPrivKey = rsa.readRSAPrivateKey(ceoRoute + 'private/', 'CEOpriv')
+
     # File is ciphered for all directives
     listOfDirectives = fm.listDir(ceoDirectivesRoute)
 
-    # Getting CEO's private key
-    CEOPrivKey = rsa.readRSAPrivateKey(ceoRoute + 'private/', 'CEOpriv')
+    # Create a directory for the CEO to save everything about this document
+    fm.createDir(ceoDocuments, filename)
+    fm.createDir(ceoDocuments + filename + '/', 'signatures')
+
+    ceoFileRoute = ceoDocuments + filename
+    ceoFileRouteSig = ceoFileRoute + '/signatures/'
 
     # Encryption is done as many times as there are directives
     for directive in listOfDirectives:
         # Reading the director's encrypted AES key file
-        dirEncAESKey = fm.readFile(
-            ceoDirectivesRoute + directive + '/', 'encryptedKey', '.aes')
+        dirEncAESKey = fm.readFile64(
+            ceoDirectivesRoute + directive + '/private/', 'encryptedKey', '.aes')
 
         # Decrypting director's AES Key
-        decAESKey = rsa.decryptRSA(dirEncAESKey, CEOPrivKey)
+        decAESKey = base64.b64decode(rsa.decryptRSA(dirEncAESKey, CEOPrivKey))
 
         # Encrypting file using directive's AES key
         encContent, iv = aes.encryptAES(decAESKey, contentFile)
@@ -81,10 +89,19 @@ def chooseADocument():
         fileDir = 'directives/' + directive + '/documents/' + filename + '/'
 
         # Sending ecrypted document and IV to directive
-        fm.saveFile(fileDir, 'encryptedFile', '.enc', contentFile)
-        fm.saveFile(fileDir, 'iv', '.csv', contentFile)
+        fm.savefile64(fileDir, 'encFile', '.enc', encContent)
+        fm.savefile64(fileDir, 'iv', '.data', iv)
+
+        #pruebaR = fm.readFile64(fileDir, 'encFile', '.enc')
+        #iv = fm.readFile64(fileDir, 'iv', '.data')
+        #desc = aes.decryptAES(decAESKey, pruebaR, iv)
+        #fm.saveFile(fileDir, filename, '', desc)
+
+        # Create directory to know this director has to sign this document
+        fm.createDir(ceoFileRouteSig, directive)
 
     print("Documents have been sent to each directive")
+    input()
 
 
-#ceoPrincipalMenu()
+ceoPrincipalMenu()
