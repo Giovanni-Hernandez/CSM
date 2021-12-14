@@ -55,19 +55,29 @@ def verification():
             singleDocument()
 
         if(option == 2):
-            input()
+            allDocuments()
 
 
 def singleDocument():
     # Getting al documents available for signature
     filename = chooseADocument(ceoDocuments)
-    verifySignature(filename)
+
+    system('cls')
+    print('S I G N A T U R E S\n')
+    print('\tFile: ' + filename + '\n')
+    verifySignatures(filename)
+    pause()
+
+
+def allDocuments():
     input()
 
-    return 1
+
+def pause():
+    input('Enter any key to continue...')
 
 
-def verifySignature(filename):
+def verifySignatures(filename):
     # Getting all directives that can sign this document
     signaturesRoute = ceoDocuments + filename + '/signatures/'
     listOfDir = fm.listDir(signaturesRoute)
@@ -84,12 +94,12 @@ def verifySignature(filename):
 
         # Checking if signature has been done
         if(signature == False):
-            print(directive + ' has not signed this document')
+            print('\t\t' + directive + ' has not signed this document\n')
         # Verify signature
         elif(rsa.verifySHA256(document, signature, keyRSADirPub)):
-            print(directive + "'s signature is valid")
+            print('\t\t' + directive + "'s signature is valid\n")
         else:
-            print(directive + "'s signature IS NOT VALID!!!")
+            print('\t\t' + directive + "'s signature IS NOT VALID!!!\n")
 
 
 def chooseADocument(route):
@@ -117,6 +127,15 @@ def encryptDocument():
     folder = ceoRoute + privateFolder + 'documents/'
     filename = chooseADocument(folder)
 
+    ceoFileRoute = ceoDocuments + filename + '/'
+
+    if(fm.existsDir(ceoFileRoute, '')):
+        system('cls')
+        print('W A R N I N G\n')
+        print('\tThe file ' + filename + ' has already been encrypted\n')
+        pause()
+        return False
+
     # Bytes from file are read
     contentFile = fm.readFile(folder, filename, '')
 
@@ -130,8 +149,7 @@ def encryptDocument():
     fm.createDir(ceoDocuments, filename)
     fm.createDir(ceoDocuments + filename + '/', 'signatures')
 
-    ceoFileRoute = ceoDocuments + filename
-    ceoFileRouteSig = ceoFileRoute + '/signatures/'
+    ceoFileRouteSig = ceoFileRoute + 'signatures/'
 
     # Encryption is done as many times as there are directives
     for directive in listOfDirectives:

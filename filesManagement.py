@@ -76,3 +76,7 @@ def listDir(route):
 def createDir(route, name):
     if not os.path.exists(route + name):
         os.mkdir(route + name)
+
+
+def existsDir(route, name):
+    return os.path.exists(route + name)
