@@ -1,6 +1,7 @@
 import base64
 import subprocess
 import os
+from datetime import datetime
 
 # Saves a file in a route with specific extension using base 64
 
@@ -80,3 +81,8 @@ def createDir(route, name):
 
 def existsDir(route, name):
     return os.path.exists(route + name)
+
+def dateNow():
+    now = datetime.now()
+    return "\n\nThis report was generated on " + str(now.month) + "/" + str(now.day) + "/" + str(now.year) +  " at " + str(now.hour)+ ":" + str(now.minute) + ":" + str(now.second)
+   
