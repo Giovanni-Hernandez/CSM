@@ -10,6 +10,7 @@ ceoRoute = 'ceo/'
 privateFolder = 'private/'
 ceoDirectivesRoute = 'ceo/directives/'
 ceoDocuments = 'ceo/documents/'
+ceoReports = ceoRoute + privateFolder + 'reports/'
 
 
 def ceoPrincipalMenu():
@@ -34,7 +35,28 @@ def ceoPrincipalMenu():
             verification()
 
         if(option == 3):
-            input()
+            deleteDocument()
+
+
+def deleteDocument():
+    filename = chooseADocument(ceoDocuments)
+
+    # Getting users' routes
+    sigDocumentRoute = ceoDocuments + filename + '/signatures/'
+    dirRoute = 'directives/'
+
+    # Getting each directives document route if it exists
+    listOfDir = fm.listDir(sigDocumentRoute)
+
+    # Deleting document for each directive
+    for directive in listOfDir:
+        dirDocumentRoute = dirRoute + directive + '/documents/' + filename
+        fm.deleteDir(dirDocumentRoute)
+
+    # Deleting document for CEO
+    fm.deleteDir(ceoDocuments + filename)
+
+    pause()
 
 
 def verification():
@@ -60,22 +82,53 @@ def singleDocument():
     # Getting al documents available for signature
     filename = chooseADocument(ceoDocuments)
 
-    system('cls')
-    print('S I G N A T U R E S\n')
-    print('\tFile: ' + filename + '\n')
-    verifySignatures(filename)
+    date = fm.dateNow()
+    fullDate = fm.fullDate()
+    reportName = ceoReports + 'singleDocumentSignatures' + fullDate + '.txt'
+
+    f = open(reportName, 'w')
+    f.write('CEO Security Master\n\n')
+    f.write('Report of signatures of a single document\n\n')
+    f.write('File: ' + filename + '\n\n')
+    f.write("\tDirectives' signatures: \n\n")
+
+    verifySignatures(filename, f)
+
+    f.write(date)
+    f.close()
+
     pause()
 
 
 def allDocuments():
-    input()
+
+    date = fm.dateNow()
+    fullDate = fm.fullDate()
+    reportName = ceoReports + 'allDocumentsSignatures' + fullDate + '.txt'
+
+    f = open(reportName, 'w')
+    f.write('CEO Security Master\n\n')
+    f.write('Report of signatures of all documents')
+
+    listOfDocuments = fm.listDir(ceoDocuments)
+
+    for document in listOfDocuments:
+        f.write('\n\nFile: ' + document + '\n\n')
+        f.write("\tDirectives' signatures: \n\n")
+
+        verifySignatures(document, f)
+
+    f.write(date)
+    f.close()
+
+    pause()
 
 
 def pause():
     input('Enter any key to continue...')
 
 
-def verifySignatures(filename):
+def verifySignatures(filename, f):
     # Getting all directives that can sign this document
     signaturesRoute = ceoDocuments + filename + '/signatures/'
     listOfDir = fm.listDir(signaturesRoute)
@@ -92,12 +145,12 @@ def verifySignatures(filename):
 
         # Checking if signature has been done
         if(signature == False):
-            print('\t\t' + directive + ' has not signed this document\n')
+            f.write('\t\t* ' + directive + ' has not signed this document\n')
         # Verify signature
         elif(rsa.verifySHA256(document, signature, keyRSADirPub)):
-            print('\t\t' + directive + "'s signature is valid\n")
+            f.write('\t\t* ' + directive + "'s signature is valid\n")
         else:
-            print('\t\t' + directive + "'s signature IS NOT VALID!!!\n")
+            f.write('\t\t* ' + directive + "'s signature IS NOT VALID!!!\n")
 
 
 def chooseADocument(route):
