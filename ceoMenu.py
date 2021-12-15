@@ -91,6 +91,7 @@ def encryptDocument():
         # time.sleep(2)
 
         # Document directory is created
+        fm.createDir('directives/' + directive + '/', 'documents')
         fm.createDir('directives/' + directive + '/documents/', filename)
         fileDir = 'directives/' + directive + '/documents/' + filename + '/'
 
