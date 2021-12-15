@@ -136,16 +136,13 @@ def get_otp():
 
     os.mkdir("../CSM/directives/"+username_info)
 
-    # To store the documents AES and IV
+    # To store the documents AES, QR and IV
 
     os.mkdir("../CSM/directives/"+username_info+"/private") 
-    os.mkdir("../CSM/directives/"+username_info+"/private/documents")
 
-    # To store his signatures 
+    # To generate the OTP 
 
-    os.mkdir("../CSM/directives/"+username_info+"/private/signatures") 
     gen.generate(username_info)
-
     print("### QR stored in: ..CSM/directives/"+username_info+"/private/qr.png")
     
     var = input("\nATENTION: Do you want to start with the key generation process?(y/n)\n[>]: ")
