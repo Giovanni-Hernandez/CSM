@@ -152,6 +152,7 @@ def singleDocument():
 
     print("\nReporte file stored in: " + reportName + "\n")
     # time.sleep(2)
+    fm.openFile(reportName, '')
 
     pause()
 
@@ -179,6 +180,7 @@ def allDocuments():
 
     print("\nReporte file stored in: " + reportName + "\n")
     # time.sleep(2)
+    fm.openFile(reportName, '')
 
     pause()
 

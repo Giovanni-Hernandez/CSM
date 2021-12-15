@@ -4,17 +4,15 @@ import os
 from datetime import datetime
 import shutil
 
+
 # Saves a file in a route with specific extension using base 64
-
-
 def savefile64(route, filename, extension, contentBytes):
     f = open(route + filename + extension, 'wb')
     f.write(base64.b64encode(contentBytes))
     f.close()
 
+
 # Reads bytes from file in base 64
-
-
 def readFile64(route, filename, extension):
     try:
         f = open(route + filename + extension, 'rb')
@@ -26,9 +24,8 @@ def readFile64(route, filename, extension):
 
     return content
 
+
 # Reads bytes from file
-
-
 def readFile(route, filename, extension):
 
     try:
@@ -40,9 +37,8 @@ def readFile(route, filename, extension):
     f.close()
     return content
 
+
 # Saves a file in a route with specific extension
-
-
 def saveFile(route, filename, extension, contentBytes):
     f = open(route + filename + extension, 'wb')
     f.write(contentBytes)
@@ -55,21 +51,18 @@ def openFile(route, filename, extension):
         route + filename + extension
     subprocess.Popen(direccion, shell=True)
 
+
 # Return a list of all documents that are in a carpet
-
-
 def listFiles(route):
     return os.listdir(route)
 
+
 # Delete a file that you select
-
-
 def deleteFile(route):
     os.remove(route)
 
+
 # List of all directories inside a directory
-
-
 def listDir(route):
     return [d for d in os.listdir(route) if os.path.isdir(os.path.join(route, d))]
 
@@ -99,3 +92,8 @@ def deleteDir(route):
         shutil.rmtree(route)
     except OSError as e:
         print(f"Error:{ e.strerror}")
+
+
+def openFile(route, filename):
+    os.startfile(os.path.join(os.path.dirname(
+        os.path.abspath(__file__)), os.path.normpath(route + filename)))
