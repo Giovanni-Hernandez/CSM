@@ -248,7 +248,8 @@ def deleteDocument():
     # Deleting document for CEO
     fm.deleteDir(ceoDocuments + filename)
 
-    print("The document " + filename + " and related files have been deleted\n")
+    print("\nThe document " + filename +
+          " and related files have been deleted\n")
     pause()
 
 
