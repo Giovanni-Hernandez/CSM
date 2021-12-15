@@ -27,7 +27,17 @@ def ceoPrincipalMenu():
         print('\t4. Exit app')
         print('\nSelect an option: ', end='')
 
-        option = int(input())
+        try:
+            option = int(input())
+        except ValueError:
+            system('cls')
+            print('\n\tSelect a valid option\n')
+            pause()
+
+        if(option <= 0 or option > 4):
+            system('cls')
+            print('\n\tSelect a valid option\n')
+            pause()
 
         if(option == 1):
             encryptDocument()
@@ -128,7 +138,18 @@ def verification():
     print('\t3. Cancel')
     print('\nSelect an option: ', end='')
 
-    option = int(input())
+    try:
+        option = int(input())
+    except Exception:
+        pass
+        system('cls')
+        print('\tSelect a valid option\n')
+        pause()
+
+    if(option <= 0 or option > 3):
+        system('cls')
+        print('\tSelect a valid option\n')
+        pause()
 
     if(option == 1):
         singleDocument()
@@ -302,7 +323,19 @@ def chooseADocument(route, encryption=False):
 
     print('\t' + str(i) + '. Cancel')
 
-    fileSelected = int(input("\nChoose a file: "))
+    try:
+        fileSelected = int(input("\nChoose a file: "))
+    except ValueError:
+        system('cls')
+        print('\n\tSelect a valid option\n')
+        pause()
+        return False
+
+    if(fileSelected <= 0 or fileSelected > i):
+        system('cls')
+        print('\n\tSelect a valid option\n')
+        pause()
+        return False
 
     if (fileSelected == i):
         return False
