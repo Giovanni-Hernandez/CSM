@@ -1,0 +1,16 @@
+CEO Security Master
+
+Report of signatures of a single document
+
+File: automataPila.c
+
+	Directives' signatures: 
+
+		* carlos's signature is valid
+		* gabriela has not signed this document
+		* giovanni has not signed this document
+		* marco has not signed this document
+		* sandy has not signed this document
+
+
+This report was generated on 12/15/2021 at 13:39:46

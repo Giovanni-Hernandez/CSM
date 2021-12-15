@@ -18,7 +18,10 @@ def directivePrincipalMenu(username):
         print('\t4. Log out')
         print('\nSelect an option: ', end='')
 
-        option = int(input())
+        try:
+            option = int(input())
+        except:
+            option = 0
 
         if(option == 1):
             #Aqui se va a la parte de firmar un documento
@@ -31,6 +34,9 @@ def directivePrincipalMenu(username):
         if(option == 3):
             #Aqui simplemente muestra un reporte
             signedDocuments(directive)
+
+        if(option == 0):
+            print("\nPlease introduce a valid number\n")
 
 def signDocument(directive):
     
@@ -48,6 +54,8 @@ def signDocument(directive):
 
     #Le mostamos al usuario los documentos que estan disponibles para firmar
     i = 1
+    pos = 0
+    band = True
     print('S I G N  A  D O C U M E N T\n')
     print("Select a document to sign")
     
@@ -57,11 +65,24 @@ def signDocument(directive):
         return print("You already signed all the documents :)")
 
     #files = fiMan.listFiles(routeDocsDirective)
-    for file in files:
-        print("\t" + str(i) +". "+file)
-        i = i + 1
-    
-    pos = int(input("\nYour option: "))
+    while(band == True):
+        for file in files:
+            print("\t" + str(i) +". "+file)
+            i = i + 1
+        
+        try:
+            pos = int(input("\nYour option: "))
+        except:
+            pos = -1
+
+        if(pos == -1 or pos >= i or pos == 0):
+            print("\nPlease introduce a valid number\n")
+            print('S I G N  A  D O C U M E N T\n')
+            print("Select a document to sign")
+            i = 1
+        else:
+            band = False  
+        
     file_sel_name = files[pos-1]
 
     #Se desencripta los archivos que estan en la carpeta que seleccione
@@ -77,7 +98,19 @@ def signDocument(directive):
     #Se muestra el archivo al directivo
     fiMan.openFile2(routeDocSel, file_sel_name ,"")
 
-    res = int(input("\nDo you want to sign '" + file_sel_name + "'?\n\t1.Yes\n\t2.No\nYour Option: "))
+    band = True
+    while(band == True):
+        try:
+            res = int(input("\nDo you want to sign '" + file_sel_name + "'?\n\t1.Yes\n\t2.No\nYour Option: "))
+            band = False
+        except:
+            res = -1
+        
+        if(res == -1 or res > 2 or res == 0):
+            print("\nPlease introduce a valid number\n")
+            band = True
+
+
     if(res == 1):
         #Se firma el documento con RSA
         print("Signing "+ file_sel_name +"...")
