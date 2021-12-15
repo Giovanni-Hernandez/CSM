@@ -5,7 +5,6 @@ from rsa.pkcs1 import verify
 import filesManagement as fm
 import rsa2048 as rsa
 import aesCBC as aes
-import time
 
 ceoRoute = 'ceo/'
 privateFolder = 'private/'
@@ -54,14 +53,11 @@ def encryptDocument():
         pause()
         return False
 
-    print("------------- Encryption -------------\n")
     # Bytes from file are read
     contentFile = fm.readFile(folder, filename, '')
 
     # Getting CEO's private key
     CEOPrivKey = rsa.readRSAPrivateKey(ceoRoute + 'private/', 'CEOpriv')
-    print("Getting CEO's RSA private key...")
-    # time.sleep(2)
 
     # File is ciphered for all directives
     listOfDirectives = fm.listDir(ceoDirectivesRoute)
@@ -78,17 +74,11 @@ def encryptDocument():
         dirEncAESKey = fm.readFile64(
             ceoDirectivesRoute + directive + '/private/', 'encryptedKey', '.aes')
 
-        print("------------- " + directive + " -------------\n")
-
         # Decrypting director's AES Key
         decAESKey = base64.b64decode(rsa.decryptRSA(dirEncAESKey, CEOPrivKey))
-        print("Decrypting AES key with CEO's private RSA key...")
-        # time.sleep(2)
 
         # Encrypting file using directive's AES key
         encContent, iv = aes.encryptAES(decAESKey, contentFile)
-        print("Encrypting file with AES key...")
-        # time.sleep(2)
 
         # Document directory is created
         fm.createDir('directives/' + directive + '/documents/', filename)
@@ -97,17 +87,13 @@ def encryptDocument():
         # Sending ecrypted document and IV to directive
         fm.savefile64(fileDir, 'encFile', '.enc', encContent)
         fm.savefile64(fileDir, 'iv', '.data', iv)
-        print("Encryption stored in: " + 'directives/' +
-              directive + '/documents/' + filename + '/encFile.enc')
-        print("IV stored in: " + 'directives/' +
-              directive + '/documents/' + filename + '/iv.data\n')
-        # time.sleep(2)
 
         # Create directory to know this director has to sign this document
         fm.createDir(ceoFileRouteSig, directive)
         fm.savefile64(ceoFileRouteSig + '/' + directive +
                       '/', 'encFile', '.enc', encContent)
 
+    print("The document has been sent to each directive\n")
     pause()
 
 
@@ -149,9 +135,8 @@ def singleDocument():
     f.write(date)
     f.close()
 
-    print("\nReporte file stored in: " + reportName + "\n")
-    # time.sleep(2)
-
+    system("cls")
+    print("\nThe report file" + reportName + " has been generated an stored\n")
     pause()
 
 
@@ -176,57 +161,35 @@ def allDocuments():
     f.write(date)
     f.close()
 
-    print("\nReporte file stored in: " + reportName + "\n")
-    # time.sleep(2)
-
+    system("cls")
+    print("\nThe report file" + reportName + " has been generated an stored\n")
     pause()
 
 
 # Function to verify signatures of a document
 def verifySignatures(filename, f):
-
-    print("------------- " + filename + " -------------\n")
-    # time.sleep(2)
-
     # Getting all directives that can sign this document
     signaturesRoute = ceoDocuments + filename + '/signatures/'
     listOfDir = fm.listDir(signaturesRoute)
 
     for directive in listOfDir:
-
-        print("------------- " + directive + " -------------\n")
-        # time.sleep(2)
-
         # Getting directives public key
         routeDirective = ceoDirectivesRoute + '/' + directive + '/'
         keyRSADirPub = rsa.readRSAPublicKey(routeDirective, "pub")
-        print(directive + "'s RSA public key retrieved")
-        # time.sleep(2)
 
         # Getting encrypted file and signature
         routeDirSignature = signaturesRoute + directive + '/'
         document = fm.readFile64(routeDirSignature, "encFile", ".enc")
         signature = fm.readFile64(routeDirSignature, "encFile", ".enc.sig")
-        print("Retrieving encrypted file and signature...")
-        # time.sleep(2)
-
-        print("Verifying signature with RSA public key...")
-        # time.sleep(2)
 
         # Checking if signature has been done
         if(signature == False):
             f.write('\t\t* ' + directive + ' has not signed this document\n')
-            print(directive + ' has not signed this document\n')
-            # time.sleep(2)
         # Verify signature
         elif(rsa.verifySHA256(document, signature, keyRSADirPub)):
-            f.write(directive + "'s signature is valid\n")
-            print(directive + "'s signature is valid\n")
-            # time.sleep(2)
+            f.write('\t\t* ' + directive + "'s signature is valid\n")
         else:
             f.write('\t\t* ' + directive + "'s signature IS NOT VALID!!!\n")
-            print(directive + "'s signature IS NOT VALID!!!\n")
-            # time.sleep(2)
 
 
 # Function to delete document
@@ -248,7 +211,9 @@ def deleteDocument():
     # Deleting document for CEO
     fm.deleteDir(ceoDocuments + filename)
 
-    print("The document " + filename + " and related files have been deleted\n")
+    system("cls")
+    print("\nThe document " + filename +
+          " and related files have been deleted\n")
     pause()
 
 
