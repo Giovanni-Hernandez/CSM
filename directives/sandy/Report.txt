@@ -6,6 +6,9 @@ Directive: sandy
 
 The documents that you have signed are:
 	*c-aes-decryption-diagram.pdf
+	*c-aes-encryption-diagram.pdf
+	*c-hash-notas.pdf
+	*substitution-box.png
 
 
-This report was generated on 12/14/2021 at 21:40:34
+This report was generated on 12/15/2021 at 12:52:41

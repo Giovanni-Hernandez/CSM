@@ -1,0 +1,49 @@
+CEO Security Master
+
+Report of signatures of all documents
+
+File: c-aes-decryption-diagram.pdf
+
+	Directives' signatures: 
+
+		* carlos's signature is valid
+		* gabriela's signature is valid
+		* giovanni has not signed this document
+		* marco's signature is valid
+		* sandy's signature is valid
+
+
+File: c-aes-encryption-diagram.pdf
+
+	Directives' signatures: 
+
+		* carlos's signature is valid
+		* gabriela's signature is valid
+		* giovanni has not signed this document
+		* marco has not signed this document
+		* sandy's signature is valid
+
+
+File: c-hash-notas.pdf
+
+	Directives' signatures: 
+
+		* carlos's signature is valid
+		* gabriela has not signed this document
+		* giovanni has not signed this document
+		* marco has not signed this document
+		* sandy's signature is valid
+
+
+File: substitution-box.png
+
+	Directives' signatures: 
+
+		* carlos's signature is valid
+		* gabriela has not signed this document
+		* giovanni has not signed this document
+		* marco has not signed this document
+		* sandy's signature is valid
+
+
+This report was generated on 12/15/2021 at 12:58:8

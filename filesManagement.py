@@ -46,7 +46,7 @@ def saveFile(route, filename, extension, contentBytes):
 
 
 # Open a file in any format
-def openFile(route, filename, extension):
+def openFile2(route, filename, extension):
     direccion = os.path.abspath(os.getcwd()) + "/" + \
         route + filename + extension
     subprocess.Popen(direccion, shell=True)

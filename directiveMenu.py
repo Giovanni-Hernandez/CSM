@@ -49,9 +49,14 @@ def signDocument(directive):
     #Le mostamos al usuario los documentos que estan disponibles para firmar
     i = 1
     print('S I G N  A  D O C U M E N T\n')
-    print("Select a document to sing")
+    print("Select a document to sign")
     
-    files = fiMan.listFiles(routeDocsDirective)
+    files = verifiDocume(directive)
+
+    if not files:
+        return print("You already signed all the documents :)")
+
+    #files = fiMan.listFiles(routeDocsDirective)
     for file in files:
         print("\t" + str(i) +". "+file)
         i = i + 1
@@ -70,7 +75,7 @@ def signDocument(directive):
     time.sleep(3)
     print("Opening " + file_sel_name +"...")
     #Se muestra el archivo al directivo
-    fiMan.openFile(routeDocSel, file_sel_name ,"")
+    fiMan.openFile2(routeDocSel, file_sel_name ,"")
 
     res = int(input("\nDo you want to sign '" + file_sel_name + "'?\n\t1.Yes\n\t2.No\nYour Option: "))
     if(res == 1):
@@ -132,7 +137,7 @@ def docToSign(directive):
     file.write(date)
     file.close()
 
-    fiMan.openFile(routeReport, "", "")
+    fiMan.openFile2(routeReport, "", "")
 
 
 def signedDocuments(directive):
@@ -169,7 +174,21 @@ def signedDocuments(directive):
     file.write(date)
     file.close()
 
-    fiMan.openFile(routeReport, "", "")
+    fiMan.openFile2(routeReport, "", "")
    
+def verifiDocume(directive):
+    routeDocsDirective = 'directives/' + directive + '/documents/'
+    files = fiMan.listFiles(routeDocsDirective)
+    missing = []
+
+    for file in files:
+        route = routeDocsDirective + '/' + file + "/"
+        band = fiMan.existsDir(route, "encFile.enc.sig")
+        if(band == False):
+            missing.append(file)
+
+    return missing
+
+
 
 #directivePrincipalMenu("sandy")   
