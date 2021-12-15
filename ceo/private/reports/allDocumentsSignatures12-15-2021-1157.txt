@@ -6,19 +6,19 @@ File: c-aes-decryption-diagram.pdf
 
 	Directives' signatures: 
 
-carlos's signature is valid
-gabriela's signature is valid
+		* carlos's signature is valid
+		* gabriela's signature is valid
 		* giovanni has not signed this document
-marco's signature is valid
-sandy's signature is valid
+		* marco's signature is valid
+		* sandy's signature is valid
 
 
 File: c-aes-encryption-diagram.pdf
 
 	Directives' signatures: 
 
-carlos's signature is valid
-gabriela's signature is valid
+		* carlos's signature is valid
+		* gabriela's signature is valid
 		* giovanni has not signed this document
 		* marco has not signed this document
 		* sandy has not signed this document
@@ -28,7 +28,7 @@ File: c-hash-notas.pdf
 
 	Directives' signatures: 
 
-carlos's signature is valid
+		* carlos's signature is valid
 		* gabriela has not signed this document
 		* giovanni has not signed this document
 		* marco has not signed this document
@@ -39,11 +39,11 @@ File: substitution-box.png
 
 	Directives' signatures: 
 
-carlos's signature is valid
+		* carlos's signature is valid
 		* gabriela has not signed this document
 		* giovanni has not signed this document
 		* marco has not signed this document
 		* sandy has not signed this document
 
 
-This report was generated on 12/15/2021 at 0:59:7
+This report was generated on 12/15/2021 at 1:1:57

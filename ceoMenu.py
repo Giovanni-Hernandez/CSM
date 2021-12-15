@@ -220,7 +220,7 @@ def verifySignatures(filename, f):
             # time.sleep(2)
         # Verify signature
         elif(rsa.verifySHA256(document, signature, keyRSADirPub)):
-            f.write(directive + "'s signature is valid\n")
+            f.write('\t\t* ' + directive + "'s signature is valid\n")
             print(directive + "'s signature is valid\n")
             # time.sleep(2)
         else:
