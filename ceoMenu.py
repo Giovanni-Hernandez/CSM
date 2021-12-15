@@ -38,12 +38,18 @@ def ceoPrincipalMenu():
         if(option == 3):
             deleteDocument()
 
+        if(option == 4):
+            system('cls')
+
 
 # Function to perform file encryption
 def encryptDocument():
 
     folder = ceoRoute + privateFolder + 'documents/'
-    filename = chooseADocument(folder)
+    filename = chooseADocument(folder, True)
+
+    if not filename:
+        return False
 
     ceoFileRoute = ceoDocuments + filename + '/'
 
@@ -135,6 +141,9 @@ def singleDocument():
     # Getting al documents available for signature
     filename = chooseADocument(ceoDocuments)
 
+    if not filename:
+        return False
+
     date = fm.dateNow()
     fullDate = fm.fullDate()
     reportName = ceoReports + 'singleDocumentSignatures' + fullDate + '.txt'
@@ -163,11 +172,16 @@ def allDocuments():
     fullDate = fm.fullDate()
     reportName = ceoReports + 'allDocumentsSignatures' + fullDate + '.txt'
 
+    listOfDocuments = fm.listDir(ceoDocuments)
+
+    if not listOfDocuments:
+        print("\n\tThe are not documents available...")
+        pause()
+        return False
+
     f = open(reportName, 'w')
     f.write('CEO Security Master\n\n')
     f.write('Report of signatures of all documents')
-
-    listOfDocuments = fm.listDir(ceoDocuments)
 
     for document in listOfDocuments:
         f.write('\n\nFile: ' + document + '\n\n')
@@ -236,6 +250,9 @@ def verifySignatures(filename, f):
 def deleteDocument():
     filename = chooseADocument(ceoDocuments)
 
+    if not filename:
+        return False
+
     # Getting users' routes
     sigDocumentRoute = ceoDocuments + filename + '/signatures/'
     dirRoute = 'directives/'
@@ -257,7 +274,7 @@ def deleteDocument():
 
 
 # Function to choose a document
-def chooseADocument(route):
+def chooseADocument(route, encryption=False):
 
     # Available documents are shown
     listOfFiles = fm.listFiles(route)
@@ -267,11 +284,29 @@ def chooseADocument(route):
     system('cls')
     print("A V A I L A B L E   D O C U M E N T S\n")
 
+    if(encryption):
+        listOfEncDoc = fm.listFiles(ceoDocuments)
+
+        for encDoc in listOfEncDoc:
+            if(encDoc in listOfEncDoc):
+                listOfFiles.remove(encDoc)
+
     for file in listOfFiles:
         print("\t" + str(i) + ". " + file)
         i = i + 1
 
+    if not listOfFiles:
+        print('\tThere are no documents available...\n')
+        pause()
+        return False
+
+    print('\t' + str(i) + '. Cancel')
+
     fileSelected = int(input("\nChoose a file: "))
+
+    if (fileSelected == i):
+        return False
+
     filename = listOfFiles[fileSelected - 1]
 
     return filename
