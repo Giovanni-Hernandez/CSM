@@ -348,6 +348,3 @@ def chooseADocument(route, encryption=False):
 # Function to pause execution
 def pause():
     input('Enter any key to continue...')
-
-
-ceoPrincipalMenu()
