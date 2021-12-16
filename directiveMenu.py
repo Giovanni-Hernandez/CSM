@@ -134,7 +134,7 @@ def signDocument(directive):
             fiMan.deleteFile(routeDocSel + "/" + file_sel_name)
             band = False
         except:
-            input("Please close the file " + file_sel_name + ".pdf, then press enter ")
+            input("Please close the file " + file_sel_name + ", then press enter ")
 
 def docToSign(directive):
     routeDocsDirective = 'directives/' + directive + '/documents/'
