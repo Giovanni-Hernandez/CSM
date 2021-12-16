@@ -115,6 +115,8 @@ def register_user():
         Button(register_screen, text="OK", width=15, height=1, font=("Tahoma", 11), background="#E03C2E",foreground="white", activeforeground="white", activebackground="#1BB022", command = delete_register_screen).pack()
 
 
+def pause():
+    input("Opening...Please CLOSE the file and press enter to continue...")
 
 def get_otp():
     Label(register_screen, text="",bg="black").pack()
@@ -171,24 +173,28 @@ def get_otp():
 
         rsa2048.saveRSAKey("../CSM/directives/"+username_info+"/","pub",pubKey)
         print("### Public key stored in: CSM/directives/"+username_info+"/pub.pem")
-        time.sleep(3)
+        fman.openFile2("../CSM/directives/"+username_info+"/","pub",".pem")
+        pause()
         
         # Private RSA
 
         rsa2048.saveRSAKey("../CSM/directives/"+username_info+"/private/","priv",privKey)
-        print("### Private key stored in: CSM/directives/"+username_info+"/private/priv.pem")
-        
+        print("\n### Private key stored in: CSM/directives/"+username_info+"/private/priv.pem")
+        fman.openFile2("../CSM/directives/"+username_info+"/private/","priv",".pem")
+        pause()
         
         print("\n-----Key exchange-----")
         print("\nThe CEO's RSA public key is being shared with you...")
         shutil.copyfile("../CSM/ceo/CEOpub.pem", "../CSM/directives/"+username_info+"/CEOpub.pem")
         time.sleep(3)
         print("### CEO's RSA public key stored in: /CSM/directives/"+username_info+"/CEOpub.pem")
-       
+        fman.openFile2("../CSM/directives/"+username_info+"/","CEOpub",".pem")
+        pause()
 
         print("\nThe AES key is being encrypted with the CEO's public RSA key...")
         print("Reading rsa public key of the ceo...")
         pubKeyRecovered = rsa2048.readRSAPublicKey("../CSM/directives/"+username_info+"/","CEOpub")
+        
         print("Reading your AES key...")
         aesRecovered = fman.readFile("../CSM/directives/"+username_info+"/private/","key",".aes")
         print("Encrypting...")
