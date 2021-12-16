@@ -1,11 +1,13 @@
 CEO Security Master
 
-Report of Signed Documents
+Report of Documents to Sign
 
 Directive: marco
 
-The documents that you have signed are:
-	*c-aes-decryption-diagram.pdf
+The documents to sign are:
+	*c-aes-encryption-diagram.pdf
+	*c-hash-notas.pdf
+	*Divide y vencerás.pdf
 
 
-This report was generate at 20:43:31 of 12/14/2021
+This report was generated on 12/16/2021 at 2:57:39

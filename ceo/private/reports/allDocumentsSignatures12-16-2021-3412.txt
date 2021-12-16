@@ -1,0 +1,85 @@
+CEO Security Master
+
+Report of signatures of all documents
+
+File: automataPila.c
+
+	Directives' signatures: 
+
+		* carlos's signature is valid
+		* gabriela has not signed this document
+		* giovanni's signature is valid
+		* marco's signature is valid
+		* sandy has not signed this document
+
+
+File: c-aes-decryption-diagram.pdf
+
+	Directives' signatures: 
+
+		* carlos's signature is valid
+		* gabriela's signature is valid
+		* giovanni's signature is valid
+		* marco's signature is valid
+		* sandy's signature is valid
+
+
+File: c-aes-encryption-diagram.pdf
+
+	Directives' signatures: 
+
+		* carlos's signature is valid
+		* gabriela's signature is valid
+		* giovanni has not signed this document
+		* marco has not signed this document
+		* sandy's signature is valid
+
+
+File: c-hash-notas.pdf
+
+	Directives' signatures: 
+
+		* carlos's signature is valid
+		* gabriela has not signed this document
+		* giovanni has not signed this document
+		* marco has not signed this document
+		* sandy's signature is valid
+
+
+File: c-modes_of_operation.pdf
+
+	Directives' signatures: 
+
+		* carlos has not signed this document
+		* gabriela has not signed this document
+		* geo has not signed this document
+		* giovanni has not signed this document
+		* jose's signature is valid
+		* marco has not signed this document
+		* sandy has not signed this document
+		* vika has not signed this document
+
+
+File: Divide y vencerás.pdf
+
+	Directives' signatures: 
+
+		* carlos has not signed this document
+		* gabriela has not signed this document
+		* giovanni has not signed this document
+		* marco has not signed this document
+		* sandy has not signed this document
+
+
+File: substitution-box.png
+
+	Directives' signatures: 
+
+		* carlos's signature is valid
+		* gabriela has not signed this document
+		* giovanni has not signed this document
+		* marco's signature is valid
+		* sandy's signature is valid
+
+
+This report was generated on 12/16/2021 at 3:4:12
