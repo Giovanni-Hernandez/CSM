@@ -9,7 +9,8 @@ The documents that you have signed are:
 	*c-aes-decryption-diagram.pdf
 	*c-aes-encryption-diagram.pdf
 	*c-hash-notas.pdf
+	*c-modes_of_operation.pdf
 	*substitution-box.png
 
 
-This report was generated on 12/15/2021 at 13:37:18
+This report was generated on 12/16/2021 at 12:7:48
